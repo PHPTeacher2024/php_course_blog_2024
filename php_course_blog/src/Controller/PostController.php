@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Database\ConnectionProvider;
-use App\Database\PostTable;
-use App\Model\Post;
+use App\Entity\Post;
+use App\Repository\PostRepository;
 use App\View\PhpTemplateEngine;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,11 +12,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PostController extends AbstractController
 {
-    private PostTable $postTable;
 
-    public function __construct()
+    public function __construct(
+        private readonly PostRepository $postRepository,
+    )
     {
-        $this->postTable = new PostTable(ConnectionProvider::connectDatabase());
     }
 
     public function index(): Response
@@ -34,16 +33,15 @@ class PostController extends AbstractController
             $request->get('subtitle'),
             $request->get('content'),
         );
-        $postId = $this->postTable->add($post);
+        $postId = $this->postRepository->store($post);
 
         return $this->redirectToRoute('show_post', ['postId' => $postId], Response::HTTP_SEE_OTHER);
     }
 
     public function viewPost(int $postId): Response
     {
-        $post = $this->postTable->find($postId);
-        if (!$post)
-        {
+        $post = $this->postRepository->findById($postId);
+        if ($post === null) {
             throw $this->createNotFoundException();
         }
 
