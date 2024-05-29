@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -o errexit
+
+exec docker exec \
+  --interactive \
+  --tty \
+  -e MYSQL_PWD=gX5t2UUbBn \
+  php-course-db mysql -uphp-course-app php_course
