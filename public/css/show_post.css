@@ -8,3 +8,11 @@
 {
 font-size: 18px;
 }
+
+.post-illustration img {
+    position: absolute;
+    top: 0;
+    object-fit: contain;
+    width: 800px;
+    height: 800px;
+}

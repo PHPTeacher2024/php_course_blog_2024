@@ -18,6 +18,12 @@
     <?php endif; ?>
     <p><em><?= $post->getPostedAt()->format(DateTimeInterface::RSS) ?></em></p>
     <p><?= htmlentities($post->getContent()) ?></p>
+
+    <?php if ($post->getImagePath()): ?>
+        <p class="post-illustration">
+            <img  src="<?= htmlentities('/uploads/' . $post->getImagePath()) ?>" alt='Иллюстрация'>
+        </p>
+    <?php endif; ?>
 </div>
 </body>
 </html>

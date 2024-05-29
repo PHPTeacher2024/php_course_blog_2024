@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace App\Service\Data;
 
-class Post
+class PostData
 {
     private ?int $id;
     private string $title;
@@ -13,13 +13,12 @@ class Post
     private \DateTimeImmutable $postedAt;
 
     public function __construct(
-        ?int               $id,
-        string             $title,
-        string             $subtitle,
-        string             $content,
-        ?string            $imagePath,
-        \DateTimeImmutable $postedAt,
-    )
+        ?int $id,
+        string $title,
+        string $subtitle,
+        string $content,
+        ?string $imagePath,
+        \DateTimeImmutable $postedAt)
     {
         $this->id = $id;
         $this->title = $title;
@@ -49,13 +48,24 @@ class Post
         return $this->content;
     }
 
+    public function getPostedAt(): \DateTimeImmutable
+    {
+        return $this->postedAt;
+    }
+
     public function getImagePath(): ?string
     {
         return $this->imagePath;
     }
 
-    public function getPostedAt(): ?\DateTimeImmutable
+    public function toArray(): array
     {
-        return $this->postedAt;
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'subtitle' => $this->getSubtitle(),
+            'content' => $this->getContent(),
+            'posted_at' => $this->getPostedAt()->format('Y-m-d'),
+        ];
     }
 }
