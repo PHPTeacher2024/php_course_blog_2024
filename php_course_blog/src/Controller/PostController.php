@@ -5,7 +5,6 @@ namespace App\Controller;
 
 use App\Entity\Post;
 use App\Repository\PostRepository;
-use App\View\PhpTemplateEngine;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,8 +20,7 @@ class PostController extends AbstractController
 
     public function index(): Response
     {
-        $contents = PhpTemplateEngine::render('add_post_form.php');
-        return new Response($contents);
+        return $this->render('post/add_post_form.html.twig');
     }
 
     public function publishPost(Request $request): Response
@@ -46,9 +44,16 @@ class PostController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        $contents = PhpTemplateEngine::render('post.php', [
+        return $this->render('post/view_post.html.twig', [
             'post' => $post
         ]);
-        return new Response($contents);
+    }
+
+    public function listPosts(): Response
+    {
+        $posts = $this->postRepository->findAll();
+        return $this->render('post/post_list.html.twig', [
+            'posts_list' => $posts,
+        ]);
     }
 }

@@ -1,0 +1,8 @@
+<div class="posts-list-item">
+    <h2 class="posts-list-item-title">{{ post.title }}</h2>
+    {% if post.subtitle %}
+        <h3 class="posts-list-item-subtitle">{{ post.subtitle }}</h3>
+    {% endif %}
+    <p>{{ post.content }}</p>
+    <p class="posts-list-item-posted-at">Опубликовано {{ post.postedAt.format('D, d M Y H:i:s') }} самым лучшим автором</p>
+</div>
