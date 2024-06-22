@@ -30,6 +30,7 @@ class PostController extends AbstractController
             $request->get('title'),
             $request->get('subtitle'),
             $request->get('content'),
+            '',
             new \DateTimeImmutable(),
         );
         $postId = $this->postRepository->store($post);

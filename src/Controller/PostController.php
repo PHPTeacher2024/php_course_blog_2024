@@ -5,10 +5,11 @@ namespace App\Controller;
 
 use App\Service\ImageServiceInterface;
 use App\Service\PostServiceInterface;
-use App\View\PhpTemplateEngine;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Config\Definition\Exception\ForbiddenOverwriteException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class PostController extends AbstractController
 {
@@ -20,14 +21,23 @@ class PostController extends AbstractController
     {
     }
 
-    public function index(): Response
-    {
-        $contents = PhpTemplateEngine::render('add_post_form.php');
-        return new Response($contents);
-    }
-
     public function publishPost(Request $request): Response
     {
+        $user = $this->getUser();
+        if ($user === null)
+        {
+            throw new UnauthorizedHttpException('');
+        }
+        $roles = $user->getRoles();
+        if (!in_array('ROLE_ADMIN', $roles))
+        {
+            throw new ForbiddenOverwriteException();
+        }
+        if ($user->getUserIdentifier() !== $request->get('email', ''))
+        {
+            throw new ForbiddenOverwriteException();
+        }
+
         $imagePath = (isset($_FILES['image'])) ? $this->imageService->moveImageToUploads($_FILES['image']) : null;
 
         $postId = $this->postService->savePost(
@@ -48,10 +58,9 @@ class PostController extends AbstractController
     {
         $post = $this->postService->getPost($postId);
 
-        $contents = PhpTemplateEngine::render('post.php', [
+        return $this->render('post/post.html.twig', [
             'post' => $post
         ]);
-        return new Response($contents);
     }
 
     public function deletePost(int $postId): Response

@@ -1,7 +1,20 @@
 index:
     path: /
-    controller: App\Controller\PostController::index
     methods: GET
+    controller: App\Controller\UserController::index
+
+signup:
+    path: /signup
+    controller: App\Controller\UserController::register
+
+login:
+    path: /signin
+    controller: App\Controller\SecurityController::login
+
+home:
+    path: /home
+    methods: GET
+    controller: App\Controller\PostController::listPosts
 
 add_post:
     path: /post/publish
