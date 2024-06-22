@@ -1,0 +1,19 @@
+{% extends "base.html.twig" %}
+{% block title %}Posts list{% endblock %}
+{% block head %}
+    {{ parent() }}
+    <style type="text/css">
+        a {
+            color: #0037ff;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <h1>Count of posts {{ posts_list|length }}!</h1>
+    <ul>
+        {% for post in posts_list %}
+            {% include 'post/post.html.twig' with [post] %}
+            <a href="{{ path('show_post', {postId: post.id}) }}">Читать далее</a>
+        {% endfor %}
+    </ul>
+{% endblock %}

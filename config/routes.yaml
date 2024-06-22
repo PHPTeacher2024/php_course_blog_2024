@@ -8,6 +8,11 @@ add_post:
     controller: App\Controller\PostController::publishPost
     methods: POST
 
+list_posts:
+    path: /post/list
+    controller: App\Controller\PostController::listPosts
+    methods: GET
+
 show_post:
     path: /post/{postId}
     controller: App\Controller\PostController::viewPost
